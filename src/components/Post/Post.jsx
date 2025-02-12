@@ -1,15 +1,27 @@
+/* eslint-disable react/prop-types */
 import { MoreVert } from '@mui/icons-material'
 import './post.css'
+import { Users } from "../../dummyData"
+import { useState } from 'react'
 
-const Post = () => {
+const Post = ({ post }) => {
+  const [like, setLike] = useState(post.like)
+  const [isLiked, setIsLiked] = useState(false)
+  const user = Users.filter(user => user.id === post.userId)[0]
+
+  const likeHandler = () => {
+    setLike(isLiked ? like - 1 : like + 1)
+    setIsLiked(!isLiked)
+  }
+  
   return (
     <div className="post">
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
-            <img src="/assets/person/1.jpeg" alt="" className="postProfileImg" />
-            <span className="postUsername">Aaron Taylor</span>
-            <span className="postDate">5 mins ago</span>
+            <img src={user.profilePicture} alt="" className="postProfileImg" />
+            <span className="postUsername">{user.username}</span>
+            <span className="postDate">{post.date}</span>
           </div>
           <div className="postTopRight">
             <MoreVert />
@@ -18,18 +30,18 @@ const Post = () => {
         </div>
         <div className="postCenter">
           <span className="postText">
-            Hey! Its my first post
+            {post.desc}
           </span>
-          <img src="/assets/post/6.jpeg" alt="" className="postImage" />
+          <img src={post.photo} alt="" className="postImage" />
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
-            <img className='likeIcon' src="assets/like.png" alt="" />
-            <img className='likeIcon' src="assets/heart.png" alt="" />
-            <span className="postLikeCounter">32 people have liked the post</span>
+            <img className='likeIcon' src="assets/like.png" alt="" onClick={likeHandler}/>
+            <img className='likeIcon' src="assets/heart.png" alt="" onClick={likeHandler}/>
+            <span className="postLikeCounter">{like} {like === 1 ? "person has" : "people have"} liked the post</span>
           </div>
           <div className="postBottomRight">
-            <span className="postCommentText">9 comments</span>
+            <span className="postCommentText">{post.comment} {post.comment === 1 ? "comment" : "comments"} </span>
           </div>
         </div>
       </div>
